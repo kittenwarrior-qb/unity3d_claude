@@ -17,32 +17,35 @@ Triết lý: **làm cái chạy được trước, đẹp sau, tính năng sau c
 - [ ] Cài Unity MCP, nối Claude Code (xem [SETUP.md](SETUP.md)).
 - [ ] **Project Settings → Player → Active Input Handling = `Both`** (để script dùng được Input cũ).
 
+> ⚡ **Cập nhật:** toàn bộ scene giờ **tự dựng bằng code** khi bấm Play
+> (`Core/SceneBootstrapper.cs`). Không cần kéo-thả tay. Xem [PLAY.md](PLAY.md).
+
 ## Milestone 1 — Vertical slice "chạy vòng vòng" ⭐ MVP lõi
 > Mục tiêu: capsule chạy quanh mặt phẳng, camera theo sau. Chơi được.
-- [ ] Mặt đất (Plane) + vài Cube làm nhà placeholder.
-- [ ] `PlayerController.cs` — đi/chạy/nhảy bằng CharacterController, di chuyển theo hướng camera.
-- [ ] `ThirdPersonCamera.cs` — follow mượt + xoay bằng chuột.
-- [ ] Ánh sáng URP ấm/mát + skybox sáng.
-- **Done khi:** WASD chạy mượt, Shift chạy nhanh, Space nhảy, camera bám mượt.
+- [x] Mặt đất (Plane) + nhà low-poly placeholder (`TownGenerator`).
+- [x] `PlayerController.cs` — đi/chạy/nhảy bằng CharacterController, di chuyển theo hướng camera.
+- [x] `ThirdPersonCamera.cs` — follow mượt + xoay bằng chuột.
+- [x] Ánh sáng URP ấm/mát + bầu trời pastel + fog mềm.
+- **Done khi:** WASD chạy mượt, Shift chạy nhanh, Space nhảy, camera bám mượt. ✅
 
 ## Milestone 2 — Lớp cozy & UI
-- [ ] `GameClock.cs` — đồng hồ in-game chạy, hiển thị HH:MM.
-- [ ] HUD: đồng hồ góc trên trái (mint, bo tròn) theo [UI_STYLE.md](UI_STYLE.md).
-- [ ] `Minimap` — camera nhìn từ trên, RenderTexture tròn góc phải.
-- [ ] Gợi ý điều khiển hiện lúc đầu rồi mờ dần.
-- [ ] Main Menu cozy (Bắt đầu / Cài đặt / Thoát).
+- [x] `GameClock.cs` — đồng hồ in-game chạy, hiển thị HH:MM.
+- [x] HUD: đồng hồ góc trên trái (mint, bo tròn) theo [UI_STYLE.md](UI_STYLE.md) (`HudBuilder`).
+- [x] `Minimap` — camera nhìn từ trên, RenderTexture tròn góc phải.
+- [x] Gợi ý điều khiển hiện lúc đầu rồi mờ dần (`ControlHints`).
+- [ ] Main Menu cozy (Bắt đầu / Cài đặt / Thoát). *(backlog)*
 
 ## Milestone 3 — Sống động (juice)
-- [ ] `FootstepAudio.cs` — tiếng bước chân theo tốc độ.
-- [ ] Nhạc nền lo-fi loop.
-- [ ] Particle nhẹ (lá rơi / đom đóm).
-- [ ] Thay capsule bằng nhân vật Mixamo + animation (idle/walk/run/jump).
-- [ ] Thay cube bằng asset Kenney low-poly.
+- [x] `FootstepAudio.cs` — tiếng bước chân theo tốc độ.
+- [x] Nhạc nền lo-fi loop (`AmbientMusic` + `ProceduralAudio` tổng hợp runtime).
+- [ ] Particle nhẹ (lá rơi / đom đóm). *(backlog)*
+- [ ] Thay capsule bằng nhân vật Mixamo + animation (idle/walk/run/jump). *(cần asset)*
+- [ ] Thay cube bằng asset Kenney low-poly. *(cần asset)*
 
 ## Milestone 4 — Tương tác cozy
-- [ ] `Interactable.cs` — nhấn E để nhặt hoa / ngồi ghế / vỗ mèo.
-- [ ] Ngày-đêm nhẹ (xoay directional light theo GameClock).
-- [ ] NPC đi dạo đơn giản (waypoint).
+- [x] `Interactable.cs` + `PlayerInteractor.cs` — nhấn E để nhặt hoa / ngồi ghế / vỗ mèo.
+- [x] Ngày-đêm nhẹ (`DayNightLight` xoay sun + đổi màu theo GameClock).
+- [x] NPC đi dạo đơn giản (`Wanderer`, waypoint ngẫu nhiên).
 
 ## Backlog (chưa làm, để dành)
 - Ngày/đêm đầy đủ, thời tiết.
