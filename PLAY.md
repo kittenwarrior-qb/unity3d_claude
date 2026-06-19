@@ -6,7 +6,11 @@ Toàn bộ game được **dựng tự động bằng code** khi bấm Play — 
 1. Mở project `My project (1)` bằng **Unity 6 (6000.1.x)**.
 2. Khi Unity hỏi, **Import TMP Essentials** (không bắt buộc — HUD dùng font built-in nên vẫn chạy không cần TMP).
 3. Mở scene `Assets/Scenes/SampleScene.unity` (hoặc bất kỳ scene nào).
-4. Bấm **Play**. Cả thị trấn tự dựng: mặt đất, nhà pastel, cây, hồ, nhân vật, camera, ánh sáng ấm, nhạc nền, HUD, NPC, hoa & mèo.
+4. Bấm **Play**. Cả thị trấn tự dựng và hiện **Main Menu** trên nền cảnh game.
+5. Bấm **Bắt đầu** để cầm điều khiển nhân vật. (Cài đặt: chỉnh âm lượng nhạc & tốc độ thời gian.)
+
+Thế giới gồm: mặt đất, nhà pastel, cây, hồ, ánh sáng ấm ngày/đêm, nhạc nền,
+HUD (đồng hồ + minimap + gợi ý), NPC đi dạo, hoa & mèo tương tác, lá rơi & đom đóm.
 
 ## Điều khiển
 | Phím | Hành động |
@@ -35,11 +39,16 @@ Scripts/
     PaletteLibrary.cs      # vật liệu pastel URP (cache theo màu)
     TownGenerator.cs        # mặt đất, nhà, cây, hồ, ghế, hàng rào
     DayNightLight.cs        # mặt trời + ngày/đêm ấm theo GameClock
+    AmbientParticles.cs     # lá rơi (ngày) + đom đóm (đêm)
   UI/
     GameClock.cs            # đồng hồ in-game HH:MM
     ClockHUD.cs / SimpleClockLabel.cs  # bind giờ vào label (TMP / uGUI)
     HudBuilder.cs           # dựng Canvas: đồng hồ + minimap + gợi ý
-    RoundedSprite.cs        # sinh sprite bo góc + hình tròn runtime
+    MainMenuBuilder.cs      # dựng Main Menu + Cài đặt (code-built)
+    MainMenuController.cs    # logic Bắt đầu / Cài đặt / Thoát
+    UiButtonBounce.cs        # hover/press bounce cho nút
+    UISfx.cs                 # tiếng "pop" khi bấm nút
+    RoundedSprite.cs        # sinh sprite bo góc + tròn + dot mềm runtime
     Minimap.cs              # camera nhìn từ trên → RenderTexture
     ControlHints.cs         # gợi ý điều khiển mờ dần
   Audio/

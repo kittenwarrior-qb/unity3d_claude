@@ -41,6 +41,25 @@ namespace CozyStroll.Audio
             return clip;
         }
 
+        /// <summary>A cute, short "pop" blip for UI clicks (UI_STYLE.md).</summary>
+        public static AudioClip BuildPop()
+        {
+            float dur = 0.09f;
+            int n = Mathf.CeilToInt(SampleRate * dur);
+            var data = new float[n];
+            for (int s = 0; s < n; s++)
+            {
+                float t = s / (float)SampleRate;
+                float env = Mathf.Exp(-t * 55f);
+                // Quick upward pitch sweep -> a friendly "pop".
+                float freq = Mathf.Lerp(440f, 880f, t / dur);
+                data[s] = Mathf.Sin(2f * Mathf.PI * freq * t) * env * 0.5f;
+            }
+            var clip = AudioClip.Create("ui_pop", n, 1, SampleRate, false);
+            clip.SetData(data, 0);
+            return clip;
+        }
+
         /// <summary>
         /// A gentle, slowly-evolving lo-fi pad that loops seamlessly.
         /// Built from a soft major chord + slow tremolo.

@@ -58,6 +58,32 @@ namespace CozyStroll.UI
             return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
         }
 
+        /// <summary>A soft radial dot texture for particles (leaves, fireflies).</summary>
+        public static Texture2D SoftDotTexture(int size = 32)
+        {
+            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false)
+            {
+                filterMode = FilterMode.Bilinear,
+                wrapMode = TextureWrapMode.Clamp,
+                name = "CozySoftDot"
+            };
+
+            float c = (size - 1) * 0.5f;
+            float r = size * 0.5f;
+            var pixels = new Color32[size * size];
+            for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+            {
+                float d = Mathf.Sqrt((x - c) * (x - c) + (y - c) * (y - c)) / r;
+                float a = Mathf.Clamp01(1f - d);
+                a = a * a; // softer falloff
+                pixels[y * size + x] = new Color32(255, 255, 255, (byte)(a * 255f));
+            }
+            tex.SetPixels32(pixels);
+            tex.Apply();
+            return tex;
+        }
+
         private static float RoundedRectAlpha(int x, int y, int w, int h, int radius)
         {
             float dx = Mathf.Min(x, w - 1 - x);

@@ -32,6 +32,10 @@ namespace CozyStroll.Core
         private static bool _built;
         private bool _owner;
 
+        private PlayerController _player;
+        private ThirdPersonCamera _tpc;
+        private GameObject _hudCanvas;
+
         /// <summary>Auto-spawns the bootstrapper after the scene loads.</summary>
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void AutoBoot()
@@ -77,22 +81,30 @@ namespace CozyStroll.Core
             dayNight.clock = clock;
             dayNight.sun = sun;
 
-            // --- Player ---
-            var player = BuildPlayer();
+            // --- Player (control disabled until the player presses Bắt đầu) ---
+            _player = BuildPlayer();
+            _player.enabled = false;
 
             // --- Main follow camera ---
-            var cam = BuildMainCamera(player.transform);
+            _tpc = BuildMainCamera(_player.transform);
+            _tpc.enabled = false; // stays off (won't lock cursor) during the menu
 
             // --- Minimap camera + render texture ---
-            RenderTexture minimapRT = BuildMinimapCamera(player.transform);
+            RenderTexture minimapRT = BuildMinimapCamera(_player.transform);
 
-            // --- HUD ---
-            HudBuilder.Build(clock, player.transform, minimapRT, out Text interactPrompt);
-            player.GetComponent<PlayerInteractor>().promptLabel = interactPrompt;
+            // --- HUD (hidden behind the menu for now) ---
+            _hudCanvas = HudBuilder.Build(clock, _player.transform, minimapRT, out Text interactPrompt);
+            _player.GetComponent<PlayerInteractor>().promptLabel = interactPrompt;
+            _hudCanvas.SetActive(false);
 
             // --- Ambient music ---
             var music = new GameObject("AmbientMusic", typeof(AudioSource), typeof(AmbientMusic));
             music.transform.SetParent(transform);
+            var musicSrc = music.GetComponent<AudioSource>();
+
+            // --- Atmosphere particles (leaves + night fireflies) ---
+            var fx = gameObject.AddComponent<AmbientParticles>();
+            fx.Build(clock, townGen.groundSize);
 
             // --- Life: interactables + NPCs ---
             ScatterFlowers(town, townGen);
@@ -100,7 +112,29 @@ namespace CozyStroll.Core
             MakeBenchesSittable(townGen);
             SpawnVillagers(town);
 
-            Debug.Log("[CozyStroll] Town built — go for a stroll! WASD move, Shift run, Space jump, E interact.");
+            // --- Main menu over a scenic overlook of the town ---
+            FrameMenuShot();
+            MainMenuBuilder.Build(StartGame, musicSrc, clock);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
+            Debug.Log("[CozyStroll] Town ready — press Bắt đầu to stroll. WASD move, Shift run, Space jump, E interact.");
+        }
+
+        /// <summary>Park the camera at a gentle overlook so the menu has a cozy backdrop.</summary>
+        private void FrameMenuShot()
+        {
+            var camT = _tpc.transform;
+            camT.position = new Vector3(6f, 5.5f, -14f);
+            camT.LookAt(new Vector3(0f, 1.5f, 0f));
+        }
+
+        /// <summary>Called by the main menu's "Bắt đầu" button: hand control to the player.</summary>
+        private void StartGame()
+        {
+            if (_hudCanvas != null) _hudCanvas.SetActive(true);
+            if (_player != null) _player.enabled = true;
+            if (_tpc != null) _tpc.enabled = true; // enabling runs Start -> locks cursor
         }
 
         // ---------------------------------------------------------------

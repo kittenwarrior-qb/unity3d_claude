@@ -33,12 +33,12 @@ Triết lý: **làm cái chạy được trước, đẹp sau, tính năng sau c
 - [x] HUD: đồng hồ góc trên trái (mint, bo tròn) theo [UI_STYLE.md](UI_STYLE.md) (`HudBuilder`).
 - [x] `Minimap` — camera nhìn từ trên, RenderTexture tròn góc phải.
 - [x] Gợi ý điều khiển hiện lúc đầu rồi mờ dần (`ControlHints`).
-- [ ] Main Menu cozy (Bắt đầu / Cài đặt / Thoát). *(backlog)*
+- [x] Main Menu cozy (Bắt đầu / Cài đặt / Thoát) + settings + hover bounce + pop sound (`MainMenuBuilder`).
 
 ## Milestone 3 — Sống động (juice)
 - [x] `FootstepAudio.cs` — tiếng bước chân theo tốc độ.
 - [x] Nhạc nền lo-fi loop (`AmbientMusic` + `ProceduralAudio` tổng hợp runtime).
-- [ ] Particle nhẹ (lá rơi / đom đóm). *(backlog)*
+- [x] Particle nhẹ — lá rơi (ban ngày) + đom đóm (ban đêm theo GameClock) (`AmbientParticles`).
 - [ ] Thay capsule bằng nhân vật Mixamo + animation (idle/walk/run/jump). *(cần asset)*
 - [ ] Thay cube bằng asset Kenney low-poly. *(cần asset)*
 
