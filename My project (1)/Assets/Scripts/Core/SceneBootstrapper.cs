@@ -184,16 +184,48 @@ namespace CozyStroll.Core
 
         private PlayerController BuildPlayer()
         {
-            var go = new GameObject("Player");
-            go.transform.position = new Vector3(0f, 1.2f, -8f);
-            go.tag = "Player";
+            // If the Mixamo Importer has saved a config, use the real model.
+            var cfg = Resources.Load<CozyStrollConfig>("CozyStrollConfig");
+            if (cfg != null && cfg.playerModel != null && cfg.playerAnimator != null)
+                return BuildPlayerWithModel(cfg);
 
-            var cc = go.AddComponent<CharacterController>();
-            cc.height = 1.8f;
-            cc.radius = 0.4f;
-            cc.center = new Vector3(0f, 0.9f, 0f);
+            return BuildCapsulePlayer();
+        }
 
-            // Cute capsule body + a forward "nose" so facing is readable.
+        // Real Mixamo character — swaps the capsule placeholder.
+        private PlayerController BuildPlayerWithModel(CozyStrollConfig cfg)
+        {
+            var go = SetupPlayerRoot();
+
+            // Instantiate the Mixamo model as a child.
+            var model = Instantiate(cfg.playerModel, go.transform);
+            model.name = "Model";
+            model.transform.localPosition = Vector3.zero;
+            model.transform.localRotation = Quaternion.identity;
+
+            // Animator on the model root; disable root motion so CharacterController drives.
+            var anim = model.GetComponent<Animator>();
+            if (anim == null) anim = model.AddComponent<Animator>();
+            anim.runtimeAnimatorController = cfg.playerAnimator;
+            anim.applyRootMotion = false;
+            anim.updateMode = AnimatorUpdateMode.Normal;
+
+            var controller = go.AddComponent<PlayerController>();
+            AttachSharedComponents(go, controller);
+
+            // PlayerAnimator bridges the controller state to the Animator.
+            var pa = go.AddComponent<PlayerAnimator>();
+            pa.player        = controller;
+            pa.modelAnimator = anim;
+
+            return controller;
+        }
+
+        // Fallback capsule placeholder (no config / first run).
+        private PlayerController BuildCapsulePlayer()
+        {
+            var go = SetupPlayerRoot();
+
             var body = GameObject.CreatePrimitive(PrimitiveType.Capsule);
             body.name = "Body";
             Destroy(body.GetComponent<Collider>());
@@ -210,17 +242,32 @@ namespace CozyStroll.Core
             nose.GetComponent<Renderer>().sharedMaterial = PaletteLibrary.Get(PaletteLibrary.PlayerTrim);
 
             var controller = go.AddComponent<PlayerController>();
+            AttachSharedComponents(go, controller);
+            return controller;
+        }
 
-            // Footsteps with synthesized clips.
+        // Shared root setup (CharacterController, tag, position).
+        private static GameObject SetupPlayerRoot()
+        {
+            var go = new GameObject("Player");
+            go.transform.position = new Vector3(0f, 1.2f, -8f);
+            go.tag = "Player";
+            var cc = go.AddComponent<CharacterController>();
+            cc.height = 1.8f;
+            cc.radius = 0.4f;
+            cc.center = new Vector3(0f, 0.9f, 0f);
+            return go;
+        }
+
+        // Components every player variant needs.
+        private static void AttachSharedComponents(GameObject go, PlayerController controller)
+        {
             var audioSrc = go.AddComponent<AudioSource>();
             audioSrc.spatialBlend = 0f;
             var foot = go.AddComponent<FootstepAudio>();
             foot.player = controller;
             foot.footstepClips = ProceduralAudio.BuildFootsteps();
-
             go.AddComponent<PlayerInteractor>();
-
-            return controller;
         }
 
         private ThirdPersonCamera BuildMainCamera(Transform target)
