@@ -110,8 +110,8 @@ namespace CozyStroll.UI
             rt.sizeDelta = new Vector2(720f, 64f);
 
             var label = NewText("Hints_Label", panel.transform,
-                "WASD di chuyển   ·   Shift chạy   ·   Space nhảy   ·   E tương tác   ·   Chuột xoay camera",
-                24, TextWarm);
+                "WASD di chuyển · Shift chạy · Space nhảy · E tương tác · P chụp ảnh · V thời tiết",
+                23, TextWarm);
             label.alignment = TextAnchor.MiddleCenter;
             Stretch(label.rectTransform);
 

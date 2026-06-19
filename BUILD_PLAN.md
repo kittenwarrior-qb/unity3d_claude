@@ -48,9 +48,10 @@ Triết lý: **làm cái chạy được trước, đẹp sau, tính năng sau c
 - [x] NPC đi dạo đơn giản (`Wanderer`, waypoint ngẫu nhiên).
 
 ## Backlog (chưa làm, để dành)
-- Ngày/đêm đầy đủ, thời tiết.
-- Chụp ảnh / photo mode.
-- Cá nhân hoá nhân vật.
+- [x] Thời tiết nhẹ (quang / mưa / tuyết — `WeatherController`).
+- [x] Chụp ảnh / photo mode (`PhotoMode`).
+- [ ] Cá nhân hoá nhân vật.
+- [ ] Asset thật: nhân vật Mixamo + môi trường Kenney low-poly.
 
 ---
 

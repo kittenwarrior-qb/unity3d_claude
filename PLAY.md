@@ -20,7 +20,11 @@ HUD (đồng hồ + minimap + gợi ý), NPC đi dạo, hoa & mèo tương tác,
 | Space | Nhảy |
 | Chuột | Xoay camera |
 | E | Tương tác (nhặt hoa / vỗ mèo / ngồi ghế) |
+| P | Photo Mode (bay camera tự do, Enter để chụp) |
+| V | Đổi thời tiết (quang / mưa / tuyết) |
 | Esc | Thả chuột (để dừng Play) |
+
+> Ảnh chụp (Photo Mode) lưu ở `Application.persistentDataPath` — đường dẫn in ra Console.
 
 ## Cơ chế auto-build
 `Core/SceneBootstrapper.cs` có `[RuntimeInitializeOnLoadMethod]` → tự sinh một GameObject `[CozyStroll]` ngay khi vào Play và dựng toàn bộ scene. Muốn chỉnh tham số (seed, số NPC, số hoa, giờ bắt đầu...), kéo `SceneBootstrapper` vào một Empty GameObject trong scene và sửa trong Inspector — bản tự động sẽ nhường cho bản đặt tay.
@@ -35,11 +39,13 @@ Scripts/
     PlayerController.cs    # đi/chạy/nhảy theo camera (CharacterController)
   Camera/
     ThirdPersonCamera.cs   # follow mượt + xoay chuột
+    PhotoMode.cs           # P: bay camera tự do + chụp ảnh (letterbox)
   Environment/
     PaletteLibrary.cs      # vật liệu pastel URP (cache theo màu)
     TownGenerator.cs        # mặt đất, nhà, cây, hồ, ghế, hàng rào
     DayNightLight.cs        # mặt trời + ngày/đêm ấm theo GameClock
     AmbientParticles.cs     # lá rơi (ngày) + đom đóm (đêm)
+    WeatherController.cs     # thời tiết nhẹ: quang / mưa / tuyết
   UI/
     GameClock.cs            # đồng hồ in-game HH:MM
     ClockHUD.cs / SimpleClockLabel.cs  # bind giờ vào label (TMP / uGUI)

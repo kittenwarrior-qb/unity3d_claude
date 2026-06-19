@@ -35,6 +35,7 @@ namespace CozyStroll.Core
         private PlayerController _player;
         private ThirdPersonCamera _tpc;
         private GameObject _hudCanvas;
+        private PhotoMode _photo;
 
         /// <summary>Auto-spawns the bootstrapper after the scene loads.</summary>
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -106,6 +107,15 @@ namespace CozyStroll.Core
             var fx = gameObject.AddComponent<AmbientParticles>();
             fx.Build(clock, townGen.groundSize);
 
+            // --- Gentle weather (clear / rain / snow) ---
+            var weather = gameObject.AddComponent<WeatherController>();
+            weather.Build(_player.transform, townGen.groundSize);
+
+            // --- Photo mode (P), disabled until the game starts ---
+            _photo = _tpc.gameObject.AddComponent<PhotoMode>();
+            _photo.Setup(_tpc.GetComponent<Camera>(), _tpc, _player, _hudCanvas);
+            _photo.enabled = false;
+
             // --- Life: interactables + NPCs ---
             ScatterFlowers(town, townGen);
             ScatterCats(town, townGen);
@@ -135,6 +145,7 @@ namespace CozyStroll.Core
             if (_hudCanvas != null) _hudCanvas.SetActive(true);
             if (_player != null) _player.enabled = true;
             if (_tpc != null) _tpc.enabled = true; // enabling runs Start -> locks cursor
+            if (_photo != null) _photo.enabled = true; // arm photo mode (P)
         }
 
         // ---------------------------------------------------------------
